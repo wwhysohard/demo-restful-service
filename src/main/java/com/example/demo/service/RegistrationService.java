@@ -4,7 +4,6 @@ import com.example.demo.model.User;
 import com.example.demo.repo.UserRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -15,9 +14,9 @@ public class RegistrationService {
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public RegistrationService(UserRepository userRepository) {
+    public RegistrationService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
-        this.passwordEncoder = new BCryptPasswordEncoder(12);
+        this.passwordEncoder = passwordEncoder;
     }
 
     public User saveUser(User user) {

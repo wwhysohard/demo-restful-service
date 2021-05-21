@@ -3,7 +3,7 @@ package com.example.demo.model;
 public enum Permission {
     
     read("user:read"),
-    write("user:write");
+    modify("user:modify");
 
     private final String permission;
 

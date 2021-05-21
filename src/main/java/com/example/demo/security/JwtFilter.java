@@ -9,29 +9,28 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.web.filter.GenericFilterBean;
 
-@Component
+@Service
 public class JwtFilter extends GenericFilterBean {
     
-    private final JwtProvider jwtProvider;
+    private final JwtValidator jwtValidator;
 
-    @Autowired
-    public JwtFilter(JwtProvider jwtTokenProvider) {
-        this.jwtProvider = jwtTokenProvider;
+    public JwtFilter(JwtValidator jwtValidator) {
+        this.jwtValidator = jwtValidator;
     }
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        String token = jwtProvider.resolveToken((HttpServletRequest) request);
-
+        String token = jwtValidator.resolveToken((HttpServletRequest) request);
+        
         try {
-            if (token != null && jwtProvider.isValid(token)) {
-                Authentication authentication = jwtProvider.getAuthentication(token);
+            if (token != null && jwtValidator.isValid(token)) {
+                Authentication authentication = jwtValidator.getAuthentication(token);
+
                 if (authentication != null) {
                     SecurityContextHolder.getContext().setAuthentication(authentication);
                 }

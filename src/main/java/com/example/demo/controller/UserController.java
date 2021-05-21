@@ -40,13 +40,13 @@ public class UserController {
     }
 
     @PutMapping("/update/{id}")
-    @PreAuthorize("hasAuthority('user:write')")
+    @PreAuthorize("hasAuthority('user:modify')")
     public User updateUser(@PathVariable("id") Integer id, @RequestBody RoleDTO newUserRole) {
         return userService.updateUserRole(id, newUserRole);
     }
 
-    @DeleteMapping("/delete/{id}")
-    @PreAuthorize("hasAuthority('user:write')")
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('user:modify')")
     public void deleteUser(@PathVariable("id") Integer id) {
         userService.deleteById(id);
     }

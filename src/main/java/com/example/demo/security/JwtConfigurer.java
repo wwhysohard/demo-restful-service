@@ -11,8 +11,8 @@ public class JwtConfigurer extends SecurityConfigurerAdapter<DefaultSecurityFilt
     
     private final JwtFilter jwtFilter;
 
-    public JwtConfigurer(JwtFilter jwtTokenFilter) {
-        this.jwtFilter = jwtTokenFilter;
+    public JwtConfigurer(JwtFilter jwtFilter) {
+        this.jwtFilter = jwtFilter;
     }
 
     @Override

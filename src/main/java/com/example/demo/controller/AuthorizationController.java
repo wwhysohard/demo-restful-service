@@ -1,8 +1,5 @@
 package com.example.demo.controller;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import com.example.demo.model.AuthorizationRequestDTO;
 import com.example.demo.service.AuthorizationService;
 
@@ -25,11 +22,6 @@ public class AuthorizationController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody AuthorizationRequestDTO request) {
         return authorizationService.authenticate(request);
-    }
-
-    @PostMapping("/logout")
-    public void logout(HttpServletRequest request, HttpServletResponse response) {
-        authorizationService.unauthenticate(request, response);
     }
 
 }

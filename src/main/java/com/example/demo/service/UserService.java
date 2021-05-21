@@ -5,7 +5,8 @@ import java.util.List;
 import com.example.demo.model.User;
 import com.example.demo.model.RoleDTO;
 import com.example.demo.repo.UserRepository;
-import com.example.demo.security.UserSecurity;
+
+import static com.example.demo.security.UserSecurity.getFromUser;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -22,29 +23,32 @@ public class UserService implements UserDetailsService {
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
-    
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User does not exist!"));
-        return UserSecurity.getFromUser(user);
-    }
 
     public List<User> findAll() {
         return userRepository.findAll();
     }
 
     public User findById(Integer id) {
-        return userRepository.getOne(id);
+        return userRepository.findById(id)
+                             .orElseThrow(() -> new UsernameNotFoundException("User does not exist"));
     }
 
     public User updateUserRole(Integer id, RoleDTO roleDTO) {
-        User user = userRepository.getOne(id);
+        User user = findById(id);
         user.setRole(roleDTO.getRole());
         return userRepository.save(user);
     }
 
     public void deleteById(Integer id) {
-        userRepository.deleteById(id);
+        userRepository.delete(findById(id));
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        User user = userRepository.findByUsername(username)
+                                  .orElseThrow(() -> new UsernameNotFoundException("User does not exist!"));
+                                  
+        return getFromUser(user);
     }
 
 }
