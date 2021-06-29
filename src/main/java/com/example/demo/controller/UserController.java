@@ -11,13 +11,12 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/users")
 public class UserController {
 
     private final UserService userService;
@@ -27,25 +26,31 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping
+    @PostMapping("/registration")
+    public User register(@RequestBody User user) {
+        userService.saveUser(user);
+        return user;
+    }
+
+    @GetMapping("/users")
     @PreAuthorize("hasAuthority('user:read')")
     public List<User> findAll() {
         return userService.findAll();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/users/{id}")
     @PreAuthorize("hasAuthority('user:read')")
     public User findById(@PathVariable("id") Integer id) {
         return userService.findById(id);
     }
 
-    @PutMapping("/update/{id}")
+    @PutMapping("/users/update/{id}")
     @PreAuthorize("hasAuthority('user:modify')")
     public User updateUser(@PathVariable("id") Integer id, @RequestBody RoleDTO newUserRole) {
         return userService.updateUserRole(id, newUserRole);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/users/{id}")
     @PreAuthorize("hasAuthority('user:modify')")
     public void deleteUser(@PathVariable("id") Integer id) {
         userService.deleteById(id);
